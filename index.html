@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claudeでアプリを作ろう（無料プラン版）手順書</title>
+<!-- APP_META: Claudeでアプリを作ろう（無料プラン版）手順書（HTMLアプリ版） v1 / 2026-11-15 / 元：同じフォルダの同名 .docx（文はそのまま。コピー・入力欄・チェックを追加） -->
+<style>
+:root{--bg:#f4f1ea;--paper:#fff;--ink:#23262b;--sub:#5d636d;--line:#ddd6c8;--accent:#2f7d5b;--accent-soft:#e3f1ea;--warn:#b4532a;--warn-soft:#fbeadf;--blue:#2d5f9a;--blue-soft:#e4edf8;--code:#f7f5ef;--empty:#9a8f7a}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"BIZ UDPGothic","Yu Gothic UI","Meiryo",sans-serif;line-height:1.75}
+header.top{position:sticky;top:0;z-index:5;background:var(--accent);color:#fff;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.topin{max-width:900px;margin:0 auto;padding:8px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.topin b{font-size:16px}
+.prog{flex:1;min-width:160px;display:flex;align-items:center;gap:8px;font-size:14px}
+.bar{flex:1;height:10px;background:rgba(255,255,255,.3);border-radius:6px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:#ffe08a;transition:width .3s}
+nav.steps{max-width:900px;margin:0 auto;padding:0 16px 8px;display:flex;gap:6px;overflow-x:auto}
+nav.steps a{flex:none;color:#fff;text-decoration:none;font-size:13px;padding:2px 10px;border:1px solid rgba(255,255,255,.55);border-radius:999px;white-space:nowrap}
+nav.steps a.now{background:#fff;color:var(--accent);font-weight:700}
+main{max-width:900px;margin:0 auto;padding:20px 16px 80px}
+h1{font-size:28px;line-height:1.4;margin:6px 0 10px}
+h2{font-size:21px;margin:36px 0 12px;padding:6px 14px;background:var(--accent);color:#fff;border-radius:8px;scroll-margin-top:100px}
+h3{font-size:17px;margin:20px 0 8px}
+p{margin:8px 0}
+.lead{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px 18px}
+table{border-collapse:collapse;width:100%;background:var(--paper);margin:10px 0;font-size:15px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#ece6da}
+ul{margin:6px 0;padding-left:1.3em}
+.prompt{background:var(--paper);border:2px solid var(--blue);border-radius:10px;margin:10px 0 14px;overflow:hidden}
+.phead{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--blue-soft);padding:6px 12px}
+.phead span{font-weight:700;color:var(--blue)}
+button{font:inherit;cursor:pointer}
+.copy{background:var(--blue);color:#fff;border:0;border-radius:8px;padding:6px 16px;font-weight:700;font-size:15px}
+.copy.done{background:var(--accent)}
+.fields{padding:10px 12px 2px;display:grid;gap:8px;border-bottom:1px dashed var(--line)}
+.fields label{display:grid;gap:2px;font-size:14px;color:var(--sub)}
+.fields input,.fields textarea{font:inherit;font-size:15px;padding:6px 8px;border:1px solid #b9b2a3;border-radius:6px;background:#fffdf6;color:var(--ink);width:100%}
+.fields textarea{min-height:76px;resize:vertical}
+.fhint{font-size:13px;color:var(--sub);margin:0 0 4px}
+pre{margin:0;padding:12px 14px;background:var(--code);white-space:pre-wrap;word-break:break-word;font-family:"BIZ UDGothic","Yu Gothic UI","Meiryo",monospace;font-size:15px;line-height:1.7}
+pre .f{background:#fff1c2;border-radius:3px;padding:0 2px}
+pre .f.empty{background:transparent;color:var(--empty)}
+.checks{background:var(--accent-soft);border:1px solid #bfdccd;border-radius:10px;padding:10px 14px;margin:10px 0}
+.checks h3{margin:0 0 4px}
+.checks label{display:flex;gap:10px;align-items:flex-start;padding:4px 0;cursor:pointer}
+.checks input{width:22px;height:22px;flex:none;margin-top:3px;accent-color:var(--accent)}
+.checks label.on span{color:var(--sub);text-decoration:line-through}
+.tip{background:#fff7dc;border:1px solid #ecd9a0;border-radius:10px;padding:10px 14px;margin:10px 0}
+.warn{background:var(--warn-soft);border:1px solid #f0c9b3;border-radius:10px;padding:10px 14px;margin:10px 0}
+.strong{background:var(--blue-soft);border:1px solid #c5d6ec;border-radius:10px;padding:10px 14px;margin:10px 0}
+.foot{margin-top:40px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;color:var(--sub);font-size:14px}
+.foot button{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:6px 12px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#23262b;color:#fff;padding:10px 20px;border-radius:999px;opacity:0;transition:opacity .2s;pointer-events:none;font-size:15px;z-index:9}
+#toast.show{opacity:1}
+@media (max-width:600px){.topin b{display:none}h2{scroll-margin-top:96px}h1{font-size:23px}h2{font-size:19px}table{font-size:13px}th,td{padding:6px}}
+@media print{header.top,.copy,.foot,#toast{display:none}body{background:#fff}.prompt,.checks,table{break-inside:avoid}.fields{display:none}}
+</style>
+</head>
+<body data-key="tejun.free">
+<header class="top">
+  <div class="topin"><b>Claudeでアプリを作ろう（無料プラン版）手順書</b><div class="prog">チェック <span id="pnum">0 / 0</span><div class="bar"><i id="pbar"></i></div></div></div>
+  <nav class="steps"><a href="#rule">節約ルール</a><a href="#flow">全体</a><a href="#s0">Step 0</a><a href="#s1">Step 1〜2</a><a href="#s3">Step 3</a><a href="#s4">Step 4</a><a href="#s5">Step 5</a><a href="#limit">上限</a><a href="#done">完成したら</a></nav>
+</header>
+<main>
+<h1>Claudeでアプリを作ろう（無料プラン版）手順書</h1>
+<div class="lead"><p>この手順書のプロンプトをコピーして貼るだけで、アプリの方針決めから完成まで進められます（青い枠の<b>「コピー」</b>ボタンでコピーできます）。<br>無料プランには使用量の上限があります。下の「節約ルール」を守れば、最後まで作りきれます。</p></div>
+<h2 id="rule">はじめに：節約ルール（必ず守ってください）</h2><div class="warn"><ul><li><b>段階ごとに新しいチャットにする</b>：方針決め、アプリ作り、続きの作業はそれぞれ別のチャットで行う</li><li><b>修正は1回に1か所だけ頼む</b>：「全体的にいい感じに」はNG（作り直しになって一気に消費します）</li><li><b>大事な結果はすぐメモ帳にコピーして保存する</b>：仕様書やコードなど</li><li><b>画像やファイルのアップロードは控える</b>：消費が大きくなります</li><li><b>わからないことは、まず講師に聞く</b>：AIに質問すると、それだけで枠を使います</li></ul></div><h2 id="flow">全体の流れ</h2><table><tr><th>Step</th><th>やること</th><th>チャット</th></tr><tr><td>0</td><td>準備（ログイン・メモ帳を開く）</td><td>—</td></tr><tr><td>1〜2</td><td>方針決めヒアリング → 仕様書を受け取る</td><td>チャット①（プロンプト①）</td></tr><tr><td>3</td><td>仕様書を貼ってアプリを作る</td><td>チャット②（新規・プロンプト②）</td></tr><tr><td>4</td><td>修正（1回に1か所）</td><td>チャット②（プロンプト③）</td></tr><tr><td>5</td><td>会話が長くなった／上限が近いときの引継ぎ</td><td>チャット③（新規・プロンプト④）</td></tr></table><h2 id="s0">Step 0　準備</h2><div class="checks"><h3>やること</h3><label><input type="checkbox" data-k="s0-0"><span>ブラウザで claude.ai を開き、ログインする</span></label><label><input type="checkbox" data-k="s0-1"><span>メモ帳（または Google ドキュメント）を1つ開いておく（仕様書やコードの保存用）</span></label><label><input type="checkbox" data-k="s0-2"><span>作りたいアプリのアイデアがぼんやりあればOK（まだなくても大丈夫です）</span></label></div><h2 id="s1">Step 1〜2　方針決めヒアリング（チャット①）</h2><p>新しいチャットを開き、下の枠の中をまるごとコピーして貼り付け、送信してください。<br>AIが1つずつ質問してくるので、短く答えていきます。最後に「仕様書」が出てきます。</p><div class="prompt" data-id="f1"><div class="phead"><span>プロンプト①</span><button type="button" class="copy">コピー</button></div><pre>あなたは初心者向けのアプリ企画アドバイザーです。
+私が作りたいアプリの方針を、質問しながら一緒に固めてください。
+【進め方のルール】
+・質問は1回に1つだけ。できれば選択肢（A/B/C）をつけてください
+・質問は全部で7つまで
+・あなたの返答は毎回3行以内。長い説明はしないでください
+・アプリの条件：HTML1ファイルでブラウザで動くもの／機能は3つまで
+・私のアイデアが大きすぎたら、小さく絞る提案をしてください
+【聞いてほしいこと】
+誰が使うか／何に困っているか／入力するもの／出てくる結果／
+いちばん大事な機能／見た目の好み
+質問が終わったら、下の形で仕様書を出してください。
+■アプリ名：
+■使う人と目的：
+■機能（3つまで）：
+■画面の流れ：
+■見た目：
+■作らないもの：
+では最初の質問からお願いします。</pre></div><div class="checks"><h3>✅ チェック（講師に見せてください）</h3><label><input type="checkbox" data-k="s1-0"><span>仕様書が出てきた</span></label><label><input type="checkbox" data-k="s1-1"><span>機能が3つ以内に収まっている（多ければ1つ削る）</span></label><label><input type="checkbox" data-k="s1-2"><span>仕様書をメモ帳にコピーして保存した</span></label></div><h2 id="s3">Step 3　アプリを作る（チャット②：新しいチャット）</h2><p><b>必ず新しいチャットを開いてから</b>、下のプロンプトを貼ります。<br>「（ここに仕様書を貼る）」の部分を、Step 2 で保存した仕様書に置き換えてください。</p><div class="prompt" data-id="f2"><div class="phead"><span>プロンプト②</span><button type="button" class="copy">コピー</button></div><div class="fields"><p class="fhint">ここに仕様書を貼ると、下のプロンプトに入ります。</p><label>仕様書（Step 2 で保存したもの）<textarea data-f="spec" placeholder="（ここに仕様書を貼る）"></textarea></label></div><pre>次の仕様書どおりのアプリを、HTML1ファイルのアーティファクトで作ってください。
+・説明は3行以内で、コードを優先してください
+・仕様書にないものは追加しないでください
+<span class="f empty" data-f="spec" data-def="（ここに仕様書を貼る）">（ここに仕様書を貼る）</span></pre></div><div class="checks"><h3>✅ チェック</h3><label><input type="checkbox" data-k="s3-0"><span>画面の右側にアプリが表示され、動いた</span></label><label><input type="checkbox" data-k="s3-1"><span>動かないときは、講師を呼ぶ（AIに何度も聞き直さない）</span></label></div><h2 id="s4">Step 4　修正する（チャット②の続き）</h2><p>直したい所があれば、1回に1か所だけ頼みます。「〇〇」と「内容」を書き換えて使ってください。</p><div class="prompt" data-id="f3"><div class="phead"><span>プロンプト③</span><button type="button" class="copy">コピー</button></div><div class="fields"><p class="fhint">ここに書くと、下のプロンプトに入ります。</p><label>直したい場所（〇〇）<input type="text" data-f="where" placeholder="〇〇"></label><label>直す内容<input type="text" data-f="what" placeholder="（例：ボタンを大きく）"></label></div><pre><span class="f empty" data-f="where" data-def="〇〇">〇〇</span>の部分だけ直してください。内容：<span class="f empty" data-f="what" data-def="（例：ボタンを大きく）">（例：ボタンを大きく）</span>
+それ以外の部分は変えないでください。説明は1行で。</pre></div><div class="tip"><b>コツ</b><ul><li>良い例：「『計算する』ボタンだけ直して。色を青にして」</li><li>悪い例：「全体的に使いやすくして」「なんか違う」</li><li>修正が3〜4回続いたら、Step 5 の引継ぎで新しいチャットに移ると節約になります</li></ul></div><h2 id="s5">Step 5　引継ぎ（会話が長くなった／上限が近いとき）</h2><p>「使用上限に近づいています」と表示されたときや、修正が何回も続いたときに使います。</p><h3>5-1　今のチャット（チャット②）でまとめてもらう</h3><div class="prompt" data-id="f4a"><div class="phead"><span>プロンプト④-A</span><button type="button" class="copy">コピー</button></div><pre>新しいチャットで続きをするので、次の2つを出してください。
+1. 最新の仕様書（変更点を反映したもの）
+2. 次にやりたいこと（1行）</pre></div><ul><li>出てきた内容をメモ帳にコピーします。</li><li>アプリのコードもコピーしておきます（アーティファクト画面のコピーボタン、またはダウンロード）。</li></ul><h3>5-2　新しいチャット（チャット③）で再開する</h3><div class="prompt" data-id="f4b"><div class="phead"><span>プロンプト④-B</span><button type="button" class="copy">コピー</button></div><div class="fields"><p class="fhint">5-1 でメモ帳に保存したものを、それぞれ貼ってください。下のプロンプトに入ります。</p><label>【仕様書】<textarea data-f="spec" placeholder="（ここに貼る）"></textarea></label><label>【次にやりたいこと】<textarea data-f="next" placeholder="（ここに貼る）"></textarea></label><label>【今のコード】<textarea data-f="code" placeholder="（ここに貼る）"></textarea></label></div><pre>前のチャットの続きです。下の仕様書とコードのアプリに、「次にやりたいこと」を反映してください。
+説明は3行以内で、変更した部分以外は変えないでください。
+【仕様書】
+<span class="f empty" data-f="spec" data-def="（ここに貼る）">（ここに貼る）</span>
+【次にやりたいこと】
+<span class="f empty" data-f="next" data-def="（ここに貼る）">（ここに貼る）</span>
+【今のコード】
+<span class="f empty" data-f="code" data-def="（ここに貼る）">（ここに貼る）</span></pre></div><h2 id="limit">上限に達してしまったら</h2><ul><li>慌てなくて大丈夫です。数時間たつと、また使えるようになります</li><li>仕様書とコードを講師に渡してください。講師の環境で続きを仕上げます</li><li>待つ間は、メモ帳で「次にやりたいこと」を整理しておくと、再開後がスムーズです</li></ul><h2 id="done">完成したら</h2><div class="checks"><h3>完成したら</h3><label><input type="checkbox" data-k="done-0"><span>アーティファクトの画面から HTML ファイルをダウンロードして保存</span></label><label><input type="checkbox" data-k="done-1"><span>ダブルクリックするとブラウザで開き、自分のPCでも使えます</span></label><label><input type="checkbox" data-k="done-2"><span>発表タイムで「誰の・何に困っていて・どう解決するアプリか」を1分で紹介しましょう</span></label></div>
+<div class="foot"><span>チェックと入力した内容は、このパソコンのブラウザに残ります。</span><button type="button" id="resetChecks">チェックを全部外す</button><button type="button" id="resetFields">入力欄を全部空にする</button></div>
+</main>
+<div id="toast"></div>
+<script>
+(function(){
+var KEY=document.body.dataset.key;
+function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return {}}}
+var st=load();
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+var toastEl=document.getElementById('toast'),tt;
+function toast(t){toastEl.textContent=t;toastEl.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toastEl.classList.remove('show')},1800)}
+/* 入力欄 → プロンプトの中に反映（空なら元の例文のまま） */
+document.querySelectorAll('.prompt').forEach(function(box){
+  var id=box.dataset.id;
+  box.querySelectorAll('[data-f]').forEach(function(inp){
+    if(inp.tagName==='SPAN')return;
+    var k='f:'+id+':'+inp.dataset.f;
+    if(st[k])inp.value=st[k];
+    inp.addEventListener('input',function(){st[k]=inp.value;save();render(box)});
+  });
+  render(box);
+  box.querySelector('.copy').addEventListener('click',function(){
+    var b=this,text=box.querySelector('pre').innerText;
+    function ok(){b.textContent='コピーしました';b.classList.add('done');toast('コピーしました。Claudeの入力欄に貼り付けてください');setTimeout(function(){b.textContent='コピー';b.classList.remove('done')},2000)}
+    function fallback(){var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var r=false;try{r=document.execCommand('copy')}catch(e){}document.body.removeChild(ta);r?ok():toast('コピーできませんでした。枠の中を選んで Ctrl+C でコピーしてください')}
+    if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(ok,fallback)}else{fallback()}
+  });
+});
+function render(box){
+  box.querySelectorAll('pre .f').forEach(function(sp){
+    var inp=box.querySelector('.fields [data-f="'+sp.dataset.f+'"]');
+    var v=inp?inp.value.trim():'';
+    sp.textContent=v||sp.dataset.def;sp.classList.toggle('empty',!v);
+  });
+}
+/* チェック */
+var cks=[].slice.call(document.querySelectorAll('.checks input'));
+function prog(){var n=cks.filter(function(c){return c.checked}).length;document.getElementById('pnum').textContent=n+' / '+cks.length;document.getElementById('pbar').style.width=(cks.length?100*n/cks.length:0)+'%'}
+cks.forEach(function(c){var k='c:'+c.dataset.k;c.checked=!!st[k];c.parentNode.classList.toggle('on',c.checked);
+  c.addEventListener('change',function(){st[k]=c.checked;save();c.parentNode.classList.toggle('on',c.checked);prog()})});
+prog();
+document.getElementById('resetChecks').addEventListener('click',function(){
+  if(!confirm('チェックを全部外しますか？（入力した内容は残ります）'))return;
+  cks.forEach(function(c){c.checked=false;st['c:'+c.dataset.k]=false;c.parentNode.classList.remove('on')});save();prog()});
+document.getElementById('resetFields').addEventListener('click',function(){
+  if(!confirm('入力欄を全部空にしますか？（プロンプトは元の例文に戻ります）'))return;
+  document.querySelectorAll('.fields [data-f]').forEach(function(i){i.value=''});
+  Object.keys(st).forEach(function(k){if(k.indexOf('f:')===0)delete st[k]});save();
+  document.querySelectorAll('.prompt').forEach(render)});
+/* 今いる段階を上のボタンで光らせる */
+var links=[].slice.call(document.querySelectorAll('nav.steps a'));
+var secs=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1))});
+function spy(){var y=window.scrollY+130,cur=0;secs.forEach(function(s,i){if(s&&s.offsetTop<=y)cur=i});links.forEach(function(a,i){a.classList.toggle('now',i===cur)});
+  var a=links[cur];if(a&&a.scrollIntoView&&a.parentNode.scrollWidth>a.parentNode.clientWidth){var p=a.parentNode;p.scrollLeft=a.offsetLeft-p.clientWidth/2+a.clientWidth/2}}
+window.addEventListener('scroll',spy,{passive:true});spy();
+})();
+</script>
+</body>
+</html>
